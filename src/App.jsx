@@ -64,12 +64,12 @@ export default function App() {
   }, []);
 
   return (
-    <>
-      <h1>Lista de tarefas</h1>
-      <div>
-        <label htmlFor="addTarefa">Adicionar Tarefa</label>
-        <br />
+    <div className='bg-sky-600 my-5 p-3 rounded-lg w-100'>
+      <h1 className='text-xl text-center font-bold'>Lista de Tarefas</h1>
+      <hr />
+      <div className='mt-2 flex justify-between'>
         <input
+          className='input-padrao'
           type="text"
           id="addTarefa"
           value={tarefaInput}
@@ -77,39 +77,51 @@ export default function App() {
             setTarefaInput(e.target.value);
           }}
         />
-        <button onClick={salvarTarefa}>Adicionar</button>
+        <button
+          className='ml-2 btn-success btn w-25'
+          onClick={salvarTarefa}
+        >
+          Adicionar
+        </button>
       </div>
       <ul>
         {listaTarefa.map((tarefa, index) => (
-          <li key={index}>
-            {editar == tarefa.id ? (
-              <input
-                type="text"
-                value={editarValue}
-                onChange={(e) => {
-                  setEditarValue(e.target.value);
+          <li className='flex justify-between gap-2 mt-1' key={index}>
+            <div className="">
+              {editar == tarefa.id ? (
+                <input
+                  className='input-padrao'
+                  type="text"
+                  value={editarValue}
+                  onChange={(e) => {
+                    setEditarValue(e.target.value);
+                  }}
+                />
+              ) : (
+                <span>{tarefa.nome} </span>
+              )}
+            </div>
+            <div className="flex justify-between w-25">
+              <button
+                className='btn btn-warning'
+                onClick={() => {
+                  abrirEditar(tarefa);
                 }}
-              />
-            ) : (
-              <span>{tarefa.nome} </span>
-            )}
-            <button
-              onClick={() => {
-                abrirEditar(tarefa);
-              }}
-            >
-              Editar
-            </button>
-            <button
-              onClick={() => {
-                apagarTarefa(tarefa.id);
-              }}
-            >
-              x
-            </button>
+              >
+                Editar
+              </button>
+              <button
+                className='btn btn-danger'
+                onClick={() => {
+                  apagarTarefa(tarefa.id);
+                }}
+              >
+                x
+              </button>
+            </div>
           </li>
         ))}
       </ul>
-    </>
+    </div>
   );
 }
