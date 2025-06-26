@@ -6,7 +6,7 @@
 
 @layer components {
     .input-padrao {
-        @apply bg-gray-50 border border-gray-900 rounded text-sm px-2
+        @apply bg-gray-50 border border-gray-900 rounded-lg text-sm px-2
     }
 
     .btn {

@@ -5,6 +5,8 @@ import {
   doc,
   deleteDoc,
   updateDoc,
+  query,
+  orderBy,
 } from 'firebase/firestore';
 import { db } from './firebase/configs.js';
 import { useEffect, useState } from 'react';
@@ -29,7 +31,8 @@ export default function App() {
   }
 
   function buscarTarefas() {
-    onSnapshot(collection(db, 'tarefas'), (snapshot) => {
+    const pesquisa = query(collection(db, 'tarefas'), orderBy('nome'))
+    onSnapshot(pesquisa, (snapshot) => {
       let lista = [];
       snapshot.forEach((doc) => {
         const item = {
@@ -64,7 +67,7 @@ export default function App() {
   }, []);
 
   return (
-    <div className='bg-sky-600 my-5 p-3 rounded-lg w-100'>
+    <div className='bg-sky-600 my-5 p-3 rounded-lg w-100 shadow-md shadow-cyan-50'>
       <h1 className='text-xl text-center font-bold'>Lista de Tarefas</h1>
       <hr />
       <div className='mt-2 flex justify-between'>
@@ -84,41 +87,45 @@ export default function App() {
           Adicionar
         </button>
       </div>
-      <ul>
+      <ul className='border rounded-lg mt-2'>
         {listaTarefa.map((tarefa, index) => (
-          <li className='flex justify-between gap-2 mt-1' key={index}>
-            <div className="">
-              {editar == tarefa.id ? (
-                <input
-                  className='input-padrao'
-                  type="text"
-                  value={editarValue}
-                  onChange={(e) => {
-                    setEditarValue(e.target.value);
+          <li className='' key={index}>
+            <div className="flex justify-between gap-2 m-1">
+              <div className="">
+                <span>#{index} | </span>
+                {editar == tarefa.id ? (
+                  <input
+                    className='input-padrao'
+                    type="text"
+                    value={editarValue}
+                    onChange={(e) => {
+                      setEditarValue(e.target.value);
+                    }}
+                  />
+                ) : (
+                  <span>{tarefa.nome} </span>
+                )}
+              </div>
+              <div className="flex justify-between w-25">
+                <button
+                  className='btn btn-warning'
+                  onClick={() => {
+                    abrirEditar(tarefa);
                   }}
-                />
-              ) : (
-                <span>{tarefa.nome} </span>
-              )}
+                >
+                  Editar
+                </button>
+                <button
+                  className='btn btn-danger'
+                  onClick={() => {
+                    apagarTarefa(tarefa.id);
+                  }}
+                >
+                  x
+                </button>
+              </div>
             </div>
-            <div className="flex justify-between w-25">
-              <button
-                className='btn btn-warning'
-                onClick={() => {
-                  abrirEditar(tarefa);
-                }}
-              >
-                Editar
-              </button>
-              <button
-                className='btn btn-danger'
-                onClick={() => {
-                  apagarTarefa(tarefa.id);
-                }}
-              >
-                x
-              </button>
-            </div>
+            <hr />
           </li>
         ))}
       </ul>
